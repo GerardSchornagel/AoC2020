@@ -23,7 +23,6 @@ namespace Day03
             string[] input = baseStream.Split($"\r\n");
             int mapWidth = input[0].Length;
             int mapHeigth = input.Length;
-            int[] multiply;
 
             List<string> travel = new List<string>
             {
