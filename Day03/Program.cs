@@ -6,16 +6,16 @@ namespace Day03
 {
     class Program
     {
-        /* ...#..............#.#....#..#..F
-         * ...#..#..#..............#..#...T
-         * ....#.#.......#............#...T
-         * ..##.....##.........#........##T
-         * ...#...........#...##.#...#.##.F
-         * ..#.#...#....#.....#........#..F
-         * ....##.###.....#..#.......#....T
-         * .#..##...#.....#......#..#.....F
-        */
-        // (0,0) 3 Left + 1 Down
+        /*
+         * DAY 03 PART 1&2
+         * Looking back on the previous two puzzles I saw the second part being the
+         * same problem with 1 complexity more. I decided to code this one less hardcoded
+         * and ready for multiple inputs. Strategy worked, I only had to add
+         * the List travel and move some variables with a multiply at the end.
+         * Height is complete and the Width is repeatable. So with every Loop-iteration the
+         * repition of the map is taken of the X-iteration leaving the remainder. This will
+         * tell if there is a # underneath or not.
+         */
         static void Main(string[] args)
         {
             StreamReader sr = new StreamReader("../../../input.txt");
@@ -23,31 +23,43 @@ namespace Day03
             string[] input = baseStream.Split($"\r\n");
             int mapWidth = input[0].Length;
             int mapHeigth = input.Length;
-            int travelX = 3;
-            int travelY = 1;
-            int iterationY = 0;
-            int occurence = 0;
-            int i = 0;
+            int[] multiply;
 
-            while (iterationY < mapHeigth)
+            List<string> travel = new List<string>
             {
-                //positionX //travelX * i
-                //repititionWidth //divide postitionx by mapwidth
-                //totalWidth //take whole number multiply by width
-                //newX //positionx - prev.step
+                "1,1", //60
+                "3,1", //191
+                "5,1", //64
+                "7,1", //63
+                "1,2"  //32
+            };
+            List<int> answers = new List<int>();
 
+            foreach (string problem in travel)
+            {
+                int iterationY = 0;
+                int occurences = 0;
+                int i = 0;
+                int travelX = int.Parse(problem.Substring(0, 1));
+                int travelY = int.Parse(problem.Substring(2, 1));
 
-
-                if (ocupied == "#")
+                while (iterationY < mapHeigth)
                 {
-                    occurence++;
+                    int positionX = travelX * i;
+                    Math.DivRem(positionX, mapWidth, out int remainder);
+
+                    string occupied = input[iterationY].Substring(remainder, 1);
+                    if (occupied == "#") { occurences++; }
+
+                    iterationY += travelY;
+                    i++;
                 }
 
-                iterationY += travelY;
-                i++;
+                answers.Add(occurences);
+                Console.WriteLine(occurences);
             }
-
-            Console.WriteLine(occurence);
+            int answer = answers[0] * answers[1] * answers[2] * answers[3] * answers[4];
+            Console.WriteLine(answer.ToString()); //1478615040
         }
     }
 }
